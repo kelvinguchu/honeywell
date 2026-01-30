@@ -2,6 +2,18 @@ import { getPayload, Where } from 'payload'
 import config from '@/payload.config'
 import type { Product } from '@/payload-types'
 
+function getRelationId(value: unknown): string | null {
+  if (!value) return null
+  if (typeof value === 'string') return value
+  if (typeof value === 'number') return String(value)
+  if (typeof value === 'object' && 'id' in value) {
+    const relation = value as { id?: string | number }
+    if (relation.id === undefined || relation.id === null) return null
+    return typeof relation.id === 'number' ? String(relation.id) : relation.id
+  }
+  return null
+}
+
 export async function getNewArrivals(limit: number = 4): Promise<Product[]> {
   const payload = await getPayload({ config })
 
@@ -155,4 +167,72 @@ export async function getCategoryBySlug(slug: string) {
   })
 
   return docs[0] || null
+}
+
+export async function getRelatedProducts(product: Product, limit: number = 4): Promise<Product[]> {
+  const payload = await getPayload({ config })
+  const related: Product[] = []
+  const added = new Set<string>()
+
+  const seriesId = getRelationId(product.series)
+  const categoryId = getRelationId(product.category)
+  const productId = String(product.id)
+
+  const baseAnd: Where[] = [
+    { status: { not_equals: 'discontinued' } },
+    { id: { not_equals: productId } },
+  ]
+
+  const addDocs = (docs: unknown[]) => {
+    docs.forEach((doc) => {
+      const relatedProduct = doc as Product
+      const id = String(relatedProduct.id)
+      if (!added.has(id) && related.length < limit) {
+        added.add(id)
+        related.push(relatedProduct)
+      }
+    })
+  }
+
+  if (seriesId && related.length < limit) {
+    const { docs } = await payload.find({
+      collection: 'products',
+      where: { and: [...baseAnd, { series: { equals: seriesId } }] },
+      limit,
+      sort: '-createdAt',
+      depth: 1,
+    })
+    addDocs(docs)
+  }
+
+  if (categoryId && related.length < limit) {
+    const { docs } = await payload.find({
+      collection: 'products',
+      where: { and: [...baseAnd, { category: { equals: categoryId } }] },
+      limit,
+      sort: '-createdAt',
+      depth: 1,
+    })
+    addDocs(docs)
+  }
+
+  if (related.length < limit) {
+    const { docs } = await payload.find({
+      collection: 'products',
+      where: {
+        and: [
+          ...baseAnd,
+          {
+            or: [{ status: { equals: 'new' } }, { status: { equals: 'active' } }],
+          },
+        ],
+      },
+      limit,
+      sort: '-createdAt',
+      depth: 1,
+    })
+    addDocs(docs)
+  }
+
+  return related.slice(0, limit)
 }

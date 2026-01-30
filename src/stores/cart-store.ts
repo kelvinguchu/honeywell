@@ -78,12 +78,11 @@ export const useCartStore = create<CartState>()(
               ...newItems[existingIndex],
               quantity: newItems[existingIndex].quantity + quantity,
             }
-            return { items: newItems, isOpen: true }
+            return { items: newItems }
           }
 
           return {
             items: [...state.items, { ...item, quantity }],
-            isOpen: true,
           }
         })
       },

@@ -1,11 +1,13 @@
 import React from 'react'
-import { getProductBySlug } from '@/lib/products'
+import { getProductBySlug, getRelatedProducts } from '@/lib/products'
 import { notFound } from 'next/navigation'
 import { ProductPageClient } from '@/components/product/ProductPageClient'
 import { ProductSpecifications } from '@/components/product/ProductSpecifications'
 import Link from 'next/link'
 import { HiOutlineArrowLeft } from 'react-icons/hi2'
 import type { Media } from '@/payload-types'
+import { Heading } from '@/components/ui/heading'
+import { ProductCard } from '@/components/products/ProductCard'
 
 export const generateMetadata = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params
@@ -35,6 +37,8 @@ export default async function ProductPage({ params }: Readonly<ProductPageProps>
 
   const hasSpecifications =
     (product.specifications && product.specifications.length > 0) || product.hsnCode
+
+  const relatedProducts = await getRelatedProducts(product, 4)
 
   return (
     <div className="container mx-auto px-4 pt-20 pb-6 md:pt-24 md:pb-10">
@@ -72,6 +76,17 @@ export default async function ProductPage({ params }: Readonly<ProductPageProps>
               alt={`${product.name} packaging`}
               className="object-contain w-full h-full p-4"
             />
+          </div>
+        </div>
+      )}
+
+      {relatedProducts.length > 0 && (
+        <div className="border-t border-border pt-8 md:pt-12 mt-8 md:mt-12">
+          <Heading>Related Products</Heading>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8">
+            {relatedProducts.map((relatedProduct) => (
+              <ProductCard key={relatedProduct.id} product={relatedProduct} />
+            ))}
           </div>
         </div>
       )}
