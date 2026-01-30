@@ -36,7 +36,7 @@ export function CategoryGrid({ categories }: Readonly<CategoryGridProps>) {
                   src={imageUrl}
                   alt={category.name}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="object-contain object-center transition-transform duration-500 group-hover:scale-105 p-8"
                   sizes="(max-width: 768px) 100vw, 33vw"
                 />
               ) : (

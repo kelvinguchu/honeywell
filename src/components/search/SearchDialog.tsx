@@ -285,7 +285,7 @@ export function SearchDialog() {
                               {product.shortDescription}
                             </div>
                           )}
-                          {product.basePrice && (
+                          {!!product.basePrice && (
                             <div className="text-xs font-bold text-primary mt-0.5">
                               Ksh. {product.basePrice.toLocaleString('en-KE')}
                             </div>
