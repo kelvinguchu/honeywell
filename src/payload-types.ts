@@ -69,15 +69,28 @@ export interface Config {
   collections: {
     users: User;
     media: Media;
+    categories: Category;
+    'product-series': ProductSery;
+    products: Product;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
   };
-  collectionsJoins: {};
+  collectionsJoins: {
+    categories: {
+      products: 'products';
+    };
+    'product-series': {
+      products: 'products';
+    };
+  };
   collectionsSelect: {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    'product-series': ProductSeriesSelect<false> | ProductSeriesSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -122,6 +135,12 @@ export interface UserAuthOperations {
  */
 export interface User {
   id: string;
+  name?: string | null;
+  /**
+   * User permissions
+   */
+  roles: ('admin' | 'editor' | 'user')[];
+  avatar?: (string | null) | Media;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -146,7 +165,13 @@ export interface User {
  */
 export interface Media {
   id: string;
+  /**
+   * Describe the image for accessibility
+   */
   alt: string;
+  caption?: string | null;
+  mediaType?: ('product' | 'packaging' | 'lifestyle' | 'category' | 'banner' | 'other') | null;
+  _key?: string | null;
   updatedAt: string;
   createdAt: string;
   url?: string | null;
@@ -158,6 +183,232 @@ export interface Media {
   height?: number | null;
   focalX?: number | null;
   focalY?: number | null;
+  sizes?: {
+    thumbnail?: {
+      _key?: string | null;
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    card?: {
+      _key?: string | null;
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    product?: {
+      _key?: string | null;
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+    hero?: {
+      _key?: string | null;
+      url?: string | null;
+      width?: number | null;
+      height?: number | null;
+      mimeType?: string | null;
+      filesize?: number | null;
+      filename?: string | null;
+    };
+  };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: string;
+  name: string;
+  /**
+   * URL-friendly identifier (e.g., "bluetooth-headphones")
+   */
+  slug: string;
+  /**
+   * Leave empty for top-level categories
+   */
+  parent?: (string | null) | Category;
+  description?: string | null;
+  image?: (string | null) | Media;
+  /**
+   * CSS icon class or emoji for quick identification
+   */
+  icon?: string | null;
+  /**
+   * Lower numbers appear first
+   */
+  sortOrder?: number | null;
+  /**
+   * Show on homepage or in prominent locations
+   */
+  featured?: boolean | null;
+  /**
+   * Products in this category
+   */
+  products?: {
+    docs?: (string | Product)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: string;
+  /**
+   * e.g., "Suono P10 Bluetooth Headphones"
+   */
+  name: string;
+  status: 'new' | 'active' | 'discontinued' | 'coming-soon';
+  /**
+   * Brief summary for product cards (max 160 chars)
+   */
+  shortDescription?: string | null;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  /**
+   * Harmonized System Nomenclature code for tax (e.g., 85183000)
+   */
+  hsnCode?: string | null;
+  category: string | Category;
+  series?: (string | null) | ProductSery;
+  /**
+   * List of product features/benefits
+   */
+  features?:
+    | {
+        feature: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Technical specs (e.g., "Battery Life: 15 hours")
+   */
+  specifications?:
+    | {
+        label: string;
+        value: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Default price in local currency (can be overridden per variant)
+   */
+  basePrice: number;
+  /**
+   * Different color/style options for this product
+   */
+  variants?:
+    | {
+        color: string;
+        /**
+         * Hex color for UI display
+         */
+        colorHex?: string | null;
+        /**
+         * Barcode
+         */
+        eanCode: string;
+        /**
+         * SKU (e.g., HC000004/AUD/HP/P10/SLV)
+         */
+        variantPartCode?: string | null;
+        /**
+         * Leave empty to use base price
+         */
+        price?: number | null;
+        stock?: number | null;
+        available?: boolean | null;
+        images?:
+          | {
+              image: string | Media;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Main product image shown in listings
+   */
+  featuredImage?: (string | null) | Media;
+  gallery?:
+    | {
+        image: string | Media;
+        caption?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Image of product packaging/box
+   */
+  packagingImage?: (string | null) | Media;
+  /**
+   * URL-friendly identifier (auto-generated)
+   */
+  slug: string;
+  /**
+   * Show in featured sections
+   */
+  featured?: boolean | null;
+  sortOrder?: number | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-series".
+ */
+export interface ProductSery {
+  id: string;
+  /**
+   * e.g., "Moxie", "Suono", "Trueno", "Platinum", "Value"
+   */
+  name: string;
+  slug: string;
+  /**
+   * Product tier for pricing/quality positioning
+   */
+  tier: 'premium' | 'standard' | 'value';
+  description?: string | null;
+  logo?: (string | null) | Media;
+  /**
+   * Products in this series
+   */
+  products?: {
+    docs?: (string | Product)[];
+    hasNextPage?: boolean;
+    totalDocs?: number;
+  };
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -190,6 +441,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'media';
         value: string | Media;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: string | Category;
+      } | null)
+    | ({
+        relationTo: 'product-series';
+        value: string | ProductSery;
+      } | null)
+    | ({
+        relationTo: 'products';
+        value: string | Product;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -238,6 +501,9 @@ export interface PayloadMigration {
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
+  name?: T;
+  roles?: T;
+  avatar?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -261,6 +527,9 @@ export interface UsersSelect<T extends boolean = true> {
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
+  caption?: T;
+  mediaType?: T;
+  _key?: T;
   updatedAt?: T;
   createdAt?: T;
   url?: T;
@@ -272,6 +541,145 @@ export interface MediaSelect<T extends boolean = true> {
   height?: T;
   focalX?: T;
   focalY?: T;
+  sizes?:
+    | T
+    | {
+        thumbnail?:
+          | T
+          | {
+              _key?: T;
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        card?:
+          | T
+          | {
+              _key?: T;
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        product?:
+          | T
+          | {
+              _key?: T;
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+        hero?:
+          | T
+          | {
+              _key?: T;
+              url?: T;
+              width?: T;
+              height?: T;
+              mimeType?: T;
+              filesize?: T;
+              filename?: T;
+            };
+      };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  parent?: T;
+  description?: T;
+  image?: T;
+  icon?: T;
+  sortOrder?: T;
+  featured?: T;
+  products?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-series_select".
+ */
+export interface ProductSeriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  tier?: T;
+  description?: T;
+  logo?: T;
+  products?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  name?: T;
+  status?: T;
+  shortDescription?: T;
+  description?: T;
+  hsnCode?: T;
+  category?: T;
+  series?: T;
+  features?:
+    | T
+    | {
+        feature?: T;
+        id?: T;
+      };
+  specifications?:
+    | T
+    | {
+        label?: T;
+        value?: T;
+        id?: T;
+      };
+  basePrice?: T;
+  variants?:
+    | T
+    | {
+        color?: T;
+        colorHex?: T;
+        eanCode?: T;
+        variantPartCode?: T;
+        price?: T;
+        stock?: T;
+        available?: T;
+        images?:
+          | T
+          | {
+              image?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  featuredImage?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        caption?: T;
+        id?: T;
+      };
+  packagingImage?: T;
+  slug?: T;
+  featured?: T;
+  sortOrder?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
