@@ -1,6 +1,5 @@
 import React from 'react'
 import type { ProductSery as ProductSeries, Media } from '@/payload-types'
-import Image from 'next/image'
 
 interface SeriesHeroProps {
   series: ProductSeries
@@ -15,7 +14,11 @@ export function SeriesHero({ series }: Readonly<SeriesHeroProps>) {
         <div className="flex flex-col md:flex-row md:items-center gap-8">
           {logo && typeof logo !== 'string' && logo.url && (
             <div className="relative w-32 h-32 md:w-48 md:h-48 shrink-0">
-              <Image src={logo.url} alt={logo.alt || series.name} fill className="object-contain" />
+              <img
+                src={logo.url}
+                alt={logo.alt || series.name}
+                className="absolute inset-0 w-full h-full object-contain"
+              />
             </div>
           )}
           <div>

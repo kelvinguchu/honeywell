@@ -1,6 +1,5 @@
 import React from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { HiOutlineArrowRight } from 'react-icons/hi2'
 import { getSeriesWithProducts } from '@/lib/series'
 import { ProductCard } from '@/components/products/ProductCard'
@@ -29,11 +28,10 @@ export const SeriesSection = async () => {
                   </h3>
                   {series.logo && (series.logo as Media).url && (
                     <div className="relative h-8 w-20 md:h-10 md:w-24 opacity-80 mix-blend-multiply">
-                      <Image
+                      <img
                         src={(series.logo as Media).url!}
                         alt={(series.logo as Media).alt || series.name}
-                        fill
-                        className="object-contain object-left"
+                        className="absolute inset-0 w-full h-full object-contain object-left"
                       />
                     </div>
                   )}

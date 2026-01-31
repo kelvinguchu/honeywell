@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import Image from 'next/image'
 import Link from 'next/link'
 import {
   HiOutlineXMark,
@@ -86,20 +85,17 @@ export function CartDrawer() {
                       onClick={closeCart}
                     >
                       {item.productImage ? (
-                        <Image
+                        <img
                           src={item.productImage}
                           alt={item.productName}
-                          fill
-                          className="object-contain p-2"
+                          className="absolute inset-0 w-full h-full object-contain p-2"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
-                          <Image
+                          <img
                             src="/logo.png"
                             alt="Honeywell"
-                            width={40}
-                            height={20}
-                            className="opacity-20 grayscale"
+                            className="w-[40px] h-[20px] object-contain opacity-20 grayscale"
                           />
                         </div>
                       )}

@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import {
   HiMagnifyingGlass,
   HiXMark,
@@ -267,11 +266,10 @@ export function SearchDialog() {
                         className="group flex items-center gap-3 p-2 rounded-lg hover:bg-muted transition-colors cursor-pointer"
                       >
                         <div className="relative w-14 h-14 shrink-0 bg-white border border-border rounded overflow-hidden">
-                          <Image
+                          <img
                             src={getImageUrl(product.featuredImage)}
                             alt={product.name}
-                            fill
-                            className={`object-contain p-1 ${
+                            className={`absolute inset-0 w-full h-full object-contain p-1 ${
                               hasImage(product.featuredImage) ? '' : 'opacity-20 grayscale sepia'
                             }`}
                           />

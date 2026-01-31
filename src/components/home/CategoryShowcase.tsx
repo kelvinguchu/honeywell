@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import Image from 'next/image'
 import { getCategoriesWithImages } from '@/lib/category-showcase'
 import type { Media } from '@/payload-types'
 import { HiOutlineArrowRight } from 'react-icons/hi2'
@@ -31,11 +30,10 @@ export async function CategoryShowcase() {
               >
                 {/* Image Container */}
                 <div className="relative aspect-4/3 w-full overflow-hidden border-b border-border bg-white ">
-                  <Image
+                  <img
                     src={imageUrl}
                     alt={category.name}
-                    fill
-                    className={`object-contain object-center transition-transform duration-500 group-hover:scale-110 p-8 ${
+                    className={`absolute inset-0 w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-110 p-8 ${
                       hasImage ? '' : 'opacity-20 grayscale sepia'
                     }`}
                   />

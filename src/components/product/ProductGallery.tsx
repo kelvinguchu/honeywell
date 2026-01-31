@@ -1,7 +1,6 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
 import type { Media, Product } from '@/payload-types'
 import { cn } from '@/lib/utils'
 
@@ -59,13 +58,10 @@ export function ProductGallery({
       {/* Main Stage Image */}
       <div className="aspect-square relative overflow-hidden bg-muted border border-border">
         {selectedImage && typeof selectedImage !== 'number' && selectedImage.url && (
-          <Image
+          <img
             src={selectedImage.url}
             alt={selectedImage.alt || productName}
-            fill
-            className="object-contain p-4"
-            sizes="(max-width: 768px) 100vw, 50vw"
-            priority
+            className="absolute inset-0 w-full h-full object-contain p-4"
           />
         )}
         {(!selectedImage || typeof selectedImage === 'number' || !selectedImage.url) && (
@@ -89,12 +85,10 @@ export function ProductGallery({
                   : 'border-border opacity-70 hover:border-primary/50',
               )}
             >
-              <Image
+              <img
                 src={image.url || ''}
                 alt={image.alt || `${productName} view ${i + 1}`}
-                fill
-                className="object-contain p-2"
-                sizes="80px"
+                className="absolute inset-0 w-full h-full object-contain p-2"
               />
             </button>
           ))}
@@ -119,12 +113,10 @@ export function ProductGallery({
                     : 'border-border opacity-70 hover:border-primary/50',
                 )}
               >
-                <Image
+                <img
                   src={image.url || ''}
                   alt={`${variantColor || 'Variant'} view ${i + 1}`}
-                  fill
-                  className="object-contain p-2"
-                  sizes="80px"
+                  className="absolute inset-0 w-full h-full object-contain p-2"
                 />
               </button>
             ))}

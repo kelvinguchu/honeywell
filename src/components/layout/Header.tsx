@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
 import { HiBars3, HiChevronRight, HiArrowRight, HiXMark, HiChevronDown } from 'react-icons/hi2'
 import Logo from '../admin/Logo'
 import {
@@ -106,11 +105,10 @@ export function Header({ data }: HeaderProps) {
                           className="group block cursor-pointer"
                         >
                           <div className="relative aspect-square overflow-hidden bg-muted mb-2 rounded-none">
-                            <Image
+                            <img
                               src={getImageUrl(product.featuredImage)}
                               alt={product.name}
-                              fill
-                              className="object-contain p-2 transition-transform group-hover:scale-105"
+                              className="absolute inset-0 w-full h-full object-contain p-2 transition-transform group-hover:scale-105"
                             />
                           </div>
                           <div className="text-sm font-medium leading-tight group-hover:text-primary line-clamp-2">
@@ -150,11 +148,10 @@ export function Header({ data }: HeaderProps) {
                           className="group flex flex-col items-center text-center p-2 rounded-none hover:bg-muted/50 transition-colors cursor-pointer"
                         >
                           <div className="relative w-16 h-16 mb-2 overflow-hidden rounded-full bg-muted">
-                            <Image
+                            <img
                               src={getImageUrl(cat.displayImage)}
                               alt={cat.name}
-                              fill
-                              className={`object-contain p-2 ${
+                              className={`absolute inset-0 w-full h-full object-contain p-2 ${
                                 cat.displayImage ? '' : 'opacity-20 grayscale sepia'
                               }`}
                             />
@@ -290,11 +287,10 @@ export function Header({ data }: HeaderProps) {
                             className="group block"
                           >
                             <div className="relative aspect-square overflow-hidden bg-white border border-border mb-1">
-                              <Image
+                              <img
                                 src={getImageUrl(product.featuredImage)}
                                 alt={product.name}
-                                fill
-                                className="object-contain p-1 transition-transform group-hover:scale-105"
+                                className="absolute inset-0 w-full h-full object-contain p-1 transition-transform group-hover:scale-105"
                               />
                             </div>
                             <div className="text-[10px] font-medium leading-tight group-hover:text-primary line-clamp-2">
@@ -323,11 +319,10 @@ export function Header({ data }: HeaderProps) {
                           className="flex items-center gap-3 px-4 py-2 hover:bg-muted/50 transition-colors"
                         >
                           <div className="relative w-8 h-8 overflow-hidden rounded-full bg-white border border-border shrink-0">
-                            <Image
+                            <img
                               src={getImageUrl(cat.displayImage)}
                               alt={cat.name}
-                              fill
-                              className={`object-contain p-1 ${
+                              className={`absolute inset-0 w-full h-full object-contain p-1 ${
                                 cat.displayImage ? '' : 'opacity-20 grayscale sepia'
                               }`}
                             />
