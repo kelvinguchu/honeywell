@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import type { CategoryWithImage } from '@/lib/category-showcase'
 import { ArrowRight } from 'lucide-react'
 import type { Media } from '@/payload-types'
@@ -31,10 +32,12 @@ export function CategoryGrid({ categories }: Readonly<CategoryGridProps>) {
           >
             <div className="relative aspect-4/3 overflow-hidden bg-muted">
               {imageUrl ? (
-                <img
+                <Image
                   src={imageUrl}
                   alt={category.name}
-                  className="absolute inset-0 w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-105 p-8"
+                  fill
+                  className="object-contain object-center transition-transform duration-500 group-hover:scale-105 p-8"
+                  sizes="(max-width: 768px) 100vw, 33vw"
                 />
               ) : (
                 <div className="flex bg-muted items-center justify-center h-full text-muted-foreground font-mono">

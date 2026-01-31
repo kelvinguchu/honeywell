@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { cn } from '@/lib/utils'
 import type { Product } from '@/payload-types'
 import { HiOutlineArrowRight } from 'react-icons/hi2'
@@ -26,17 +27,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, className }) 
       <div className="relative aspect-square overflow-hidden bg-white group">
         <Link href={`/products/${product.slug}`} className="block w-full h-full cursor-pointer">
           {image?.url ? (
-            <img
+            <Image
               src={image.url}
               alt={image.alt || product.name}
-              className="absolute inset-0 w-full h-full object-contain object-center transition-transform duration-300 group-hover:scale-105 p-4"
+              fill
+              className="object-contain object-center transition-transform duration-300 group-hover:scale-105 p-4"
+              sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-secondary/5 p-12">
-              <img
+              <Image
                 src="/logo.png"
                 alt="Honeywell"
-                className="w-full h-full object-contain object-center opacity-75 grayscale sepia-[.2] p-12"
+                fill
+                className="object-contain object-center opacity-75 grayscale sepia-[.2] p-12"
               />
             </div>
           )}

@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 import { HiOutlineArrowRight } from 'react-icons/hi2'
 import { QuickActions } from '@/components/cart'
@@ -39,17 +40,21 @@ export function HeroProductCard({ product, featured = false }: HeroProductCardPr
           {/* Mobile: Small left image, Desktop: Large top image */}
           <div className="relative w-24 h-24 lg:w-full lg:flex-1 lg:aspect-square shrink-0 lg:mb-6 bg-white lg:bg-transparent border border-border lg:border-0">
             {image?.url ? (
-              <img
+              <Image
                 src={image.url}
                 alt={image.alt || product.name}
-                className="absolute inset-0 w-full h-full object-contain p-2 lg:p-4 transition-transform duration-500 group-hover:scale-105"
+                fill
+                className="object-contain p-2 lg:p-4 transition-transform duration-500 group-hover:scale-105"
+                priority
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-secondary/5">
-                <img
+                <Image
                   src="/logo.png"
                   alt="Honeywell"
-                  className="w-25 h-7.5 object-contain opacity-20 grayscale"
+                  width={100}
+                  height={30}
+                  className="opacity-20 grayscale"
                 />
               </div>
             )}
@@ -92,17 +97,20 @@ export function HeroProductCard({ product, featured = false }: HeroProductCardPr
         {/* Image */}
         <div className="relative w-16 h-16 shrink-0 bg-white border border-border">
           {image?.url ? (
-            <img
+            <Image
               src={image.url}
               alt={image.alt || product.name}
-              className="absolute inset-0 w-full h-full object-contain p-2"
+              fill
+              className="object-contain p-2"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-secondary/5">
-              <img
+              <Image
                 src="/logo.png"
                 alt="Honeywell"
-                className="w-7.5 h-2.5 object-contain opacity-20 grayscale"
+                width={30}
+                height={10}
+                className="opacity-20 grayscale"
               />
             </div>
           )}

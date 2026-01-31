@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import type { SeriesWithProducts } from '@/lib/series'
 import { HiOutlineArrowRight } from 'react-icons/hi2'
 import type { Media } from '@/payload-types'
@@ -28,12 +29,14 @@ export function SeriesList({ seriesList }: Readonly<SeriesListProps>) {
           >
             {/* Image Container */}
             <div className="relative aspect-4/3 w-full overflow-hidden border-b border-border bg-white">
-              <img
+              <Image
                 src={imageUrl}
                 alt={series.name}
-                className={`absolute inset-0 w-full h-full object-contain object-center transition-transform duration-500 group-hover:scale-110 p-8 ${
+                fill
+                className={`object-contain object-center transition-transform duration-500 group-hover:scale-110 p-8 ${
                   hasImage ? '' : 'opacity-20 grayscale sepia'
                 }`}
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
               {/* Hover Overlay */}
               <div className="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
