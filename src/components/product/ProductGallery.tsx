@@ -90,7 +90,7 @@ export function ProductGallery({
               )}
             >
               <Image
-                src={image.url || '/placeholder.svg'}
+                src={image.url || ''}
                 alt={image.alt || `${productName} view ${i + 1}`}
                 fill
                 className="object-contain p-2"
@@ -120,7 +120,7 @@ export function ProductGallery({
                 )}
               >
                 <Image
-                  src={image.url || '/placeholder.svg'}
+                  src={image.url || ''}
                   alt={`${variantColor || 'Variant'} view ${i + 1}`}
                   fill
                   className="object-contain p-2"

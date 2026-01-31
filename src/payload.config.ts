@@ -16,6 +16,7 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
   admin: {
     user: Users.slug,
     importMap: {
@@ -52,13 +53,7 @@ export default buildConfig({
       },
     },
   },
-  collections: [
-    Users,
-    Media,
-    Categories,
-    ProductSeries,
-    Products,
-  ],
+  collections: [Users, Media, Categories, ProductSeries, Products],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
   typescript: {
